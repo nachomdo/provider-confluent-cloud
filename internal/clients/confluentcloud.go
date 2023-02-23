@@ -15,7 +15,7 @@ import (
 
 	"github.com/upbound/upjet/pkg/terraform"
 
-	"github.com/upbound/upjet-provider-template/apis/v1beta1"
+	"github.com/nachomdo/provider-confluentcloud/apis/v1beta1"
 )
 
 const (
@@ -24,7 +24,9 @@ const (
 	errGetProviderConfig    = "cannot get referenced ProviderConfig"
 	errTrackUsage           = "cannot track ProviderConfig usage"
 	errExtractCredentials   = "cannot extract credentials"
-	errUnmarshalCredentials = "cannot unmarshal template credentials as JSON"
+	errUnmarshalCredentials = "cannot unmarshal confluentcloud credentials as JSON"
+  envCloudApiKey = "cloud_api_key"
+  envCloudApiSecret = "cloud_api_secret"
 )
 
 // TerraformSetupBuilder builds Terraform a terraform.SetupFn function which
@@ -67,6 +69,15 @@ func TerraformSetupBuilder(version, providerSource, providerVersion string) terr
 			"username": creds["username"],
 			"password": creds["password"],
 		}*/
+    ps.Configuration =  map[string]any{}
+    if v, ok := creds[envCloudApiKey]; ok {
+      ps.Configuration[envCloudApiKey] = v
+    }
+
+    if v, ok := creds[envCloudApiSecret]; ok {
+      ps.Configuration[envCloudApiSecret] = v
+    }
+
 		return ps, nil
 	}
 }

@@ -1,6 +1,6 @@
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
-  name: upjet-provider-template
+  name: provider-confluentcloud
 spec:
-  package: upbound/upjet-provider-template:v0.1.0
+  package: nachomdo/provider-confluentcloud:v0.1.0
