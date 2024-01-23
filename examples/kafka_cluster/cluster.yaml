@@ -1,0 +1,16 @@
+apiVersion: kafkacluster.confluentcloud.upbound.io/v1alpha1
+kind: Cluster
+metadata:
+  name: hello-upjet
+spec:
+  forProvider:
+    basic:
+      - "external-name": "basic"
+    displayName: "nacho-pc-test"
+    availability: "SINGLE_ZONE"
+    cloud: "GCP"
+    region: "europe-west2"
+    environment:
+      - id: "env-gwg3m"
+  providerConfigRef:
+    name: default

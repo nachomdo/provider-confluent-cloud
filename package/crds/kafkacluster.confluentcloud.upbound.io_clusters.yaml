@@ -5,18 +5,18 @@ metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.8.0
   creationTimestamp: null
-  name: resources.null.template.upbound.io
+  name: clusters.kafkacluster.confluentcloud.upbound.io
 spec:
-  group: null.template.upbound.io
+  group: kafkacluster.confluentcloud.upbound.io
   names:
     categories:
     - crossplane
     - managed
-    - template
-    kind: Resource
-    listKind: ResourceList
-    plural: resources
-    singular: resource
+    - confluentcloud
+    kind: Cluster
+    listKind: ClusterList
+    plural: clusters
+    singular: cluster
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -35,7 +35,7 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Resource is the Schema for the Resources API. <no value>
+        description: Cluster is the Schema for the Clusters API. <no value>
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -50,7 +50,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ResourceSpec defines the desired state of Resource
+            description: ClusterSpec defines the desired state of Cluster
             properties:
               deletionPolicy:
                 default: Delete
@@ -63,13 +63,74 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  triggers:
-                    additionalProperties:
-                      type: string
-                    description: A map of arbitrary strings that, when changed, will
-                      force the null resource to be replaced, re-running any associated
-                      provisioners.
-                    type: object
+                  availability:
+                    description: The availability zone configuration of the Kafka
+                      cluster.
+                    type: string
+                  basic:
+                    items:
+                      type: object
+                    type: array
+                  cloud:
+                    description: The cloud service provider that runs the Kafka cluster.
+                    type: string
+                  dedicated:
+                    items:
+                      properties:
+                        cku:
+                          description: The number of Confluent Kafka Units (CKUs)
+                            for Dedicated cluster types. MULTI_ZONE dedicated clusters
+                            must have at least two CKUs.
+                          type: number
+                        encryptionKey:
+                          description: The ID of the encryption key that is used to
+                            encrypt the data in the Kafka cluster.
+                          type: string
+                      required:
+                      - cku
+                      type: object
+                    type: array
+                  displayName:
+                    description: The name of the Kafka cluster.
+                    type: string
+                  environment:
+                    description: Environment objects represent an isolated namespace
+                      for your Confluent resources for organizational purposes.
+                    items:
+                      properties:
+                        id:
+                          description: The unique identifier for the environment.
+                          type: string
+                      required:
+                      - id
+                      type: object
+                    type: array
+                  network:
+                    description: Network represents a network (VPC) in Confluent Cloud.
+                      All Networks exist within Confluent-managed cloud provider accounts.
+                    items:
+                      properties:
+                        id:
+                          description: The unique identifier for the network.
+                          type: string
+                      required:
+                      - id
+                      type: object
+                    type: array
+                  region:
+                    description: The cloud service provider region where the Kafka
+                      cluster is running.
+                    type: string
+                  standard:
+                    items:
+                      type: object
+                    type: array
+                required:
+                - availability
+                - cloud
+                - displayName
+                - environment
+                - region
                 type: object
               providerConfigRef:
                 default:
@@ -243,11 +304,29 @@ spec:
             - forProvider
             type: object
           status:
-            description: ResourceStatus defines the observed state of Resource.
+            description: ClusterStatus defines the observed state of Cluster.
             properties:
               atProvider:
                 properties:
+                  apiVersion:
+                    description: API Version defines the schema version of this representation
+                      of a Kafka cluster.
+                    type: string
+                  bootstrapEndpoint:
+                    description: The bootstrap endpoint used by Kafka clients to connect
+                      to the Kafka cluster.
+                    type: string
                   id:
+                    type: string
+                  kind:
+                    description: Kind defines the object Kafka cluster represents.
+                    type: string
+                  rbacCrn:
+                    description: The Confluent Resource Name of the Kafka cluster
+                      suitable for confluent_role_binding's crn_pattern.
+                    type: string
+                  restEndpoint:
+                    description: The REST endpoint of the Kafka cluster.
                     type: string
                 type: object
               conditions:

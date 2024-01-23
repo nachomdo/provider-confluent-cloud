@@ -30,6 +30,7 @@ import (
 	"github.com/nachomdo/provider-confluentcloud/internal/clients"
 	"github.com/nachomdo/provider-confluentcloud/internal/controller"
 	"github.com/nachomdo/provider-confluentcloud/internal/features"
+  _ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 )
 
 func main() {
